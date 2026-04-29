@@ -12,7 +12,15 @@ namespace fn {
 
 		std::error_code ec;
 
-		for (auto& entry : fs::directory_iterator(path, fs::directory_options::skip_permission_denied, ec)) {
+		for (auto& entry : fs::directory_iterator(path, 
+			fs::directory_options::skip_permission_denied | 
+			fs::directory_options::follow_directory_symlink, 
+			ec)) {
+			
+			if (!std::filesystem::exists(entry)) {
+				continue;
+			}
+
 			content.emplace_back(entry, measurer(entry));
 		}
 
