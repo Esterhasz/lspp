@@ -1,28 +1,28 @@
 ﻿#include <filesystem>
 #include <iostream>
 
-#include "Item.h"
-
 #include "measure/all.h"
 #include "priority/all.h"
 #include "predicate/all.h"
 #include "compare/all.h"
 
+#include <algorithm>
+
 #include "fn/scan_directory.h"
 #include "fn/make_setter_map.h"
-#include <windows.h>
 #include "fn/print_content.h"
 
 namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
 
+#if defined(_WIN32) || defined(_WIN64)
+	std::system("chcp 65001 > nul");
+#endif
+
 	try {
 		std::ios::sync_with_stdio(false);
 		std::cin.tie(nullptr);
-
-		SetConsoleOutputCP(CP_UTF8);
-		SetConsoleCP(CP_UTF8);
 
 		auto base = fs::current_path();
 
