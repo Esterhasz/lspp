@@ -14,12 +14,14 @@ lspp is a CLI tool for viewing directory contents and analyzing file sizes
 - ✅ Windows x32
 - ✅ Linux x64
 - ✅ Linux ARM64
+- ✅ Android ARM64
 
 ## Tested on...
 - Windows 10 x64
 - Windows 11 x64
 - Debian Linux x64
 - Debian Linux ARM64
+- Android ARM64 (via Termux)
 
 ## Installation
 No installation required.
