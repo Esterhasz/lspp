@@ -38,10 +38,11 @@ int main(int argc, char* argv[]) {
 		auto pred = config.get<Predicate>();
 		auto meas = config.get<Measurer>();
 		auto comp = config.get<Comparator>();
+		auto base = config.get<fs::path>();
 
-		auto content = fn::scan_directory(config.get<fs::path>(), meas);
+		auto content = fn::scan_directory(base, meas);
 		
-		std::sort(content.begin(), content.end(), [&](const auto& a, const auto& b) { return comp(a, b, prio, pred); });
+		std::sort(content.begin(), content.end(), [=](const auto& a, const auto& b) { return comp(a, b, prio, pred); });
 
 		fn::print_content(content);
 	}
