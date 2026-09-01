@@ -2,6 +2,7 @@
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include_directories("include")
+
 project ("lspp" VERSION 1.0.4)
 
 file (GLOB_RECURSE SRC_FILES 
@@ -11,14 +12,10 @@ file (GLOB_RECURSE SRC_FILES
 
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
 
-include(FetchContent)
-
-FetchContent_Declare(
-    utf8proc
-    GIT_REPOSITORY https://github.com/JuliaStrings/utf8proc.git
+add_executable(lspp
+    ${SRC_FILES}
+    ".lib/utf8proc.c"
 )
 
-FetchContent_MakeAvailable(utf8proc)
-
-add_executable(lspp ${SRC_FILES})
-target_link_libraries(lspp PRIVATE utf8proc)
+target_include_directories(lspp PRIVATE ".lib/")
+target_compile_definitions(lspp PRIVATE UTF8PROC_STATIC)
