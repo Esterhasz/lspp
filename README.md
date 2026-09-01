@@ -16,6 +16,8 @@ lspp is a CLI tool for viewing directory contents and analyzing file sizes
 - ✅ Linux ARM64
 - ✅ Android ARM64
 
+(if your system isn't listed here, you can try [building yourself](#self-build))
+
 ## Tested on...
 - Windows 10 x64
 - Windows 11 x64
@@ -27,10 +29,15 @@ lspp is a CLI tool for viewing directory contents and analyzing file sizes
 No installation required.
 Simply download the latest version of `lspp`, unzip it with any program you want and you're good to go!
 
+```
+cmake 
+
 ## Usage Examples
 ### Sorting by size
+
+Measures recursively and sorts by total size:
 ```bash
-$ lspp -rc -sz
+$ lspp -Rs
 ] .vs                           16/08/2026      346 MB
 ] out                           23/12/2025      76.5 MB
 ] .git                          16/08/2026      158 KB
@@ -45,15 +52,18 @@ $ lspp -rc -sz
 423 MB total by 10 entries.
 ```
 ### Sorting by name
+Case sensitive sorting by name:
 ```bash
-$ lspp -cs
+$ lspp -c
 ] A                             16/08/2026      0 B
 ] B                             16/08/2026      0 B
 ] b1                            16/08/2026      0 B
 ] C                             16/08/2026      0 B
 ] D                             16/08/2026      0 B
-
-$ lspp -ci
+```
+Case insensitive sorting by name (default):
+```
+$ lspp -c
 ] A                             16/08/2026      0 B
 ] B                             16/08/2026      0 B
 ] C                             16/08/2026      0 B
@@ -62,40 +72,55 @@ $ lspp -ci
 ```
 
 ## Arguments
-lspp supports various command-line arguments. Most options also have a short form.
+Long options use a double dash (`--`), while short options use a single dash (`-`). Shortened versions can be combined into a single argument (e.g., `-rf` is equivalent to `-r -f`).
 
 Reverse sorting order  
-`-rv` \
-`-reversed`
+`-r` \
+`--reversed`
 
 Sort entries by name (case-sensitive)  
-`-cs` \
+`-c` \
 `--by-name-cs`
 
 Sort entries by name (case-insensitive)  
-`-ci` \
+`-i` \
 `--by-name-ci`
 
 Sort entries by file size  
-`-sz` \
+`-s` \
 `--by-size`
 
 Disable size measurement  
-`-nm` \
+`-m` \
 `--no-measure` 
 
 Measure directory sizes recursively  
-`-rc` \
-`-recursive`
+`-R` \
+`--recursive`
 
 Show files before directories  
-`-ff` \
+`-f` \
 `--file-first`
 
 Show directories before files  
-`-df` \
+`-d` \
 `--dir-first`
 
 Do not prioritize files or directories  
-`-np` \
+`-p` \
 `--no-priority`
+
+# Self Build
+`lspp` relies only on standard C++ features, `CMake`, and `utf8proc` making it buildable on virtually any environment with a modern C++ compiler. If your OS isn't listed in `Supported on...`, you can try building `lspp` yourself.
+All you need is: 
+- CMake 3.20 or higher
+- A C++ compiler (clang, MSVC, etc.)
+
+## Steps to build
+1. Clone the repository
+2. Configure with CMake
+`cmake -B build -DCMAKE_BUILD_TYPE=Release`
+3. Build the binary
+`cmake --build build --config Release`
+
+You're done! 
