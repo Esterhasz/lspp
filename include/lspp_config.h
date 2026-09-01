@@ -5,4 +5,4 @@
 #include "Comparator.h"
 #include "Predicate.h"
 
-using lspp_config = TypeUnion<Measurer, Prioritizer, Comparator, Predicate>;
+using lspp_config = TypeUnion<Measurer, Prioritizer, Comparator, Predicate, std::filesystem::path>;

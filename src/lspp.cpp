@@ -9,8 +9,8 @@
 #include <algorithm>
 
 #include "fn/scan_directory.h"
-#include "fn/make_setter_map.h"
 #include "fn/print_content.h"
+#include "fn/setup_config.h"
 
 namespace fs = std::filesystem;
 
@@ -24,34 +24,22 @@ int main(int argc, char* argv[]) {
 		std::ios::sync_with_stdio(false);
 		std::cin.tie(nullptr);
 
-		auto base = fs::current_path();
-
-		auto setterMap = fn::make_setter_map();
 		auto config = lspp_config(
 			measure::files,
 			priority::directories,
 			compare::normal,
-			predicate::by_name_ci);
-
-		for (size_t i = 1; i < argc; ++i) {
-			auto param = argv[i];
-
-			auto it = setterMap.find(param);
-			if (it != setterMap.end()) {
-				it->second(config);
-			}
-			else if (fs::exists(param) &&
-				fs::is_directory(param)) {
-				base = fs::path(param);
-			}
-		}
+			predicate::by_name_ci, 
+			fs::current_path()
+		);
+        
+		fn::setup_config(argc, argv, config);
 
 		auto prio = config.get<Prioritizer>();
 		auto pred = config.get<Predicate>();
 		auto meas = config.get<Measurer>();
 		auto comp = config.get<Comparator>();
 
-		auto content = fn::scan_directory(base, meas);
+		auto content = fn::scan_directory(config.get<fs::path>(), meas);
 		
 		std::sort(content.begin(), content.end(), [&](const auto& a, const auto& b) { return comp(a, b, prio, pred); });
 

@@ -22,18 +22,17 @@ static void add_item(SetterMap& map, StringKeys keys, ConfigSetter setter) {
 SetterMap fn::make_setter_map() {
 	SetterMap map{};
 
-	add_item(map, { "-reversed", "-rv" }, set<compare::reversed>);
+    add_item(map, { "reversed",       "r" }, set<compare::reversed>);
+    add_item(map, { "recursive",      "R" }, set<measure::recursive>);
+    add_item(map, { "no-measure",     "m" }, set<measure::none>);
 
-	add_item(map, { "--by-name-cs", "-cs" }, set<predicate::by_name_cs>);
-	add_item(map, { "--by-name-ci", "-ci" }, set<predicate::by_name_ci>);
-	add_item(map, { "--by-size", "-sz" }, set<predicate::by_size>);
-	
-	add_item(map, { "--no-measure", "-nm" }, set<measure::none>);
-	add_item(map, { "-recursive", "-rc" }, set<measure::recursive>);
+    add_item(map, { "by-name-cs",     "c" }, set<predicate::by_name_cs>);
+    add_item(map, { "by-name-ci",     "i" }, set<predicate::by_name_ci>);
+    add_item(map, { "by-size",        "s" }, set<predicate::by_size>);
 
-	add_item(map, { "--file-first", "-ff" }, set<priority::files>);
-	add_item(map, { "--dir-first", "-df" }, set<priority::directories>);
-	add_item(map, { "--no-priority", "-np" }, set<priority::none>);
+    add_item(map, { "file-first",     "f" }, set<priority::files>);
+    add_item(map, { "dir-first",      "d" }, set<priority::directories>);
+    add_item(map, { "no-priority",    "p" }, set<priority::none>);
 
 	return map;
 }
