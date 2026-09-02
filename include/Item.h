@@ -11,9 +11,9 @@ class Item {
 	uintmax_t _size;
 	
 public:
-	Item(Path absolutePath, ItemType type, uintmax_t size) : 
+	Item(Path path, ItemType type, uintmax_t size) : 
 		_size(size), 
-		_path(absolutePath), 
+		_path(path), 
 		_type(type) {
 	}
 
