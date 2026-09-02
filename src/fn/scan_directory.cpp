@@ -17,9 +17,9 @@ namespace fn {
 			fs::directory_options::skip_permission_denied, 
 			ec)) {
 
-			auto status = entry.status();
+			auto type = entry.status().type();
 
-			content.emplace_back(entry.path(), status.type(), measurer(entry));
+			content.emplace_back(entry.path(), type, measurer(entry, type));
 		}
 
 		return content;
