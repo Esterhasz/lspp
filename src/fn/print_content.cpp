@@ -16,6 +16,10 @@ constexpr size_t NAME_RIGHT_PART = 10;
 constexpr size_t DATE_LENGTH_RESERVE = 10;
 constexpr size_t SIZE_LENGTH_RESERVE = 3;
 
+constexpr size_t SPACES_FIRST_COLUMN = 4;
+constexpr size_t SPACES_SECOND_COLUMN = 4;
+
+
 static size_t utf8_char_length(unsigned char c)
 {
     if ((c & 0x80) == 0) return 1;
@@ -121,21 +125,29 @@ void fn::print_content(std::vector<Item> content) {
         + DATE_LENGTH_RESERVE 
         + SIZE_LENGTH_RESERVE));
 
-    size_t totalSize = 0;
+    uintmax_t totalSize = 0;
+    
+    const size_t maxNumber = content.size();
+    const size_t numberWidth = std::to_string(content.size()).size();
 
-    for (auto& item : content) {
-
-        std::string name = item.filename().u8string();
+    for (size_t i = 0; i < content.size(); ++i) {
+        auto& item = content[i];
         
+        std::string name = item.filename().u8string();
+
         size_t namelen = utf8_char_count(name);
+
+        std::string number = std::to_string(i + 1);
+        number.insert(0, numberWidth - number.size(), ' ');
 
         if (namelen > NAME_LENGTH_RESERVE)
             name = shorten_name(name);
         else
             name.append(NAME_LENGTH_RESERVE - namelen, ' ');
-        
-        name = (item.type() == ItemType::directory 
-            ? "] " 
+
+
+        name = (item.type() == ItemType::directory
+            ? "] "
             : ". ")
             + name;
 
@@ -147,19 +159,20 @@ void fn::print_content(std::vector<Item> content) {
             std::filesystem::last_write_time(item.path())
         );
 
-        std::string line {
-            name + '\t' +
-            date + '\t' +
+
+        name.append(SPACES_FIRST_COLUMN, ' ');
+        date.append(SPACES_SECOND_COLUMN, ' ');
+
+        std::string line{
+            number + ' ' +
+            name +
+            date +
             size + '\n'
         };
 
         totalSize += item.size();
         out += line;
     }
-
-    out += "\n";
-    out += get_human_size(totalSize) + " total by ";
-    out += std::to_string(content.size()) + " entries. \n";
 
     std::cout << out;
 }
