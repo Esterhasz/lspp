@@ -5,8 +5,7 @@
 namespace measure {
 	inline uintmax_t recursive(const std::filesystem::directory_entry& entry, std::filesystem::file_type type) {
 		namespace fs = std::filesystem;
-		std::error_code e;
-
+		
 		if (type == fs::file_type::directory)
 			return fn::directory_size(entry.path());
 
