@@ -11,18 +11,10 @@ class Item {
 	uintmax_t _size;
 	
 public:
-	Item(const Entry& entry, uintmax_t size) : 
+	Item(Path absolutePath, ItemType type, uintmax_t size) : 
 		_size(size), 
-		_path(std::filesystem::absolute(entry.path())) {
-
-		_type = ItemType::unknown;
-
-		std::error_code e;
-		auto status = entry.status(e);
-
-		if (!e) {
-			_type = status.type();
-		}
+		_path(absolutePath), 
+		_type(type) {
 	}
 
 	const Path& path() const {
