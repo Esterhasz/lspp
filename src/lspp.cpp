@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 		fn::print_content(content);
 	}
 	catch (const std::exception& ex) {
-		std::cout << ex.what();
+		std::cerr << ex.what();
 	}
 
 	return 0;
