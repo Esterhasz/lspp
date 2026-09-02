@@ -7,7 +7,7 @@ namespace fs = std::filesystem;
 
 
 static void throw_invalid_argument(const std::string& arg) {
-    throw std::invalid_argument("error: unknown argument '" + arg + "'");
+    throw std::invalid_argument("Error: unknown argument '" + arg + "'.");
 }
 
 void fn::setup_config(int argc, char* argv[], lspp_config& config) {
@@ -47,6 +47,9 @@ void fn::setup_config(int argc, char* argv[], lspp_config& config) {
         }
         else if (fs::exists(arg) && fs::is_directory(arg)) {
             config.set<fs::path>(fs::path(arg));
+        }
+        else {
+            throw std::invalid_argument("Error: '" + std::string(arg) + "' is not a directory.");
         }
     }
 }
