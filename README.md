@@ -23,7 +23,7 @@ lspp is a CLI tool for viewing directory contents and analyzing file sizes
 - Windows 11 x64
 - Debian Linux x64
 - Debian Linux ARM64
-- Android ARM64 (via Termux)
+- Oxygen OS Android ARM64 (via Termux)
 
 ## Installation
 No installation required.
