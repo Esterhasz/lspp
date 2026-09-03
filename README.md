@@ -29,9 +29,6 @@ lspp is a CLI tool for viewing directory contents and analyzing file sizes
 No installation required.
 Simply download the latest version of `lspp`, unzip it with any program you want and you're good to go!
 
-```
-cmake 
-
 ## Usage Examples
 ### Sorting by size
 
