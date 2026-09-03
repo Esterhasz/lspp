@@ -60,7 +60,7 @@ $ lspp -c
 ```
 Case insensitive sorting by name (default):
 ```
-$ lspp -c
+$ lspp -i
 ] A                             16/08/2026      0 B
 ] B                             16/08/2026      0 B
 ] C                             16/08/2026      0 B
