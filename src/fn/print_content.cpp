@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <iostream>
 #include "fn/print_content.h"
+#include "utf8.h"
 
 constexpr size_t NAME_LENGTH_RESERVE = 24;
 
@@ -18,51 +19,6 @@ constexpr size_t SIZE_LENGTH_RESERVE = 3;
 
 constexpr size_t SPACES_FIRST_COLUMN = 4;
 constexpr size_t SPACES_SECOND_COLUMN = 4;
-
-
-static size_t utf8_char_length(unsigned char c)
-{
-    if ((c & 0x80) == 0) return 1;
-    if ((c & 0xE0) == 0xC0) return 2;
-    if ((c & 0xF0) == 0xE0) return 3;
-    if ((c & 0xF8) == 0xF0) return 4;
-    return 1;
-}
-
-static size_t utf8_char_count(const std::string& str) {
-    size_t p = 0;
-    size_t count = 0;
-    while (p < str.size()) {
-        p += utf8_char_length(str[p]);
-        ++count;
-    }
-
-    return count;
-}
-
-static std::string substring(const std::string& str, size_t offset, size_t count) {
-    
-    size_t charCount = 0;
-    size_t p = 0;
-    
-    std::string result{};
-
-    for (size_t i = 0; i < offset; ++i) {
-        p += utf8_char_length(str[p]);
-    }
-
-    for (; p < str.size() && charCount < count; ) {
-        charCount++;
-        char c = str[p];
-
-        size_t len = utf8_char_length(str[p]);
-
-        result.append(str, p, len);
-        p += len;
-    }
-
-    return result;
-}
 
 static std::string get_human_size(uintmax_t size) {
     const std::vector<std::string> units =
@@ -94,9 +50,9 @@ static std::string shorten_name(const std::string& str) {
 
     std::string result{};
 
-    result += substring(str, 0, NAME_LEFT_PART);
+    result += utf8::substring(str, 0, NAME_LEFT_PART);
     result += "...";
-    result += substring(str, utf8_char_count(str) - NAME_RIGHT_PART, NAME_RIGHT_PART);
+    result += utf8::substring(str, utf8::char_count(str) - NAME_RIGHT_PART, NAME_RIGHT_PART);
 
     return result;
 }
@@ -134,34 +90,32 @@ void fn::print_content(std::vector<Item> content) {
         auto& item = content[i];
         
         std::string name = item.filename().u8string();
-
-        size_t namelen = utf8_char_count(name);
-
         std::string number = std::to_string(i + 1);
         number.insert(0, numberWidth - number.size(), ' ');
+
+        size_t namelen = utf8_char_count(name);
 
         if (namelen > NAME_LENGTH_RESERVE)
             name = shorten_name(name);
         else
             name.append(NAME_LENGTH_RESERVE - namelen, ' ');
 
-
         name = (item.type() == ItemType::directory
             ? "] "
             : ". ")
             + name;
 
-        std::string size = item.size() < 1
-            ? "0 B"
-            : get_human_size(item.size());
-
         std::string date = format_time(
             std::filesystem::last_write_time(item.path())
         );
 
+        std::string size = item.size() < 1
+            ? "0 B"
+            : get_human_size(item.size());
 
-        name.append(SPACES_FIRST_COLUMN, ' ');
+
         date.append(SPACES_SECOND_COLUMN, ' ');
+        name.append(SPACES_FIRST_COLUMN, ' ');
 
         std::string line{
             number + ' ' +
