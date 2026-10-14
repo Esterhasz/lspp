@@ -31,7 +31,9 @@ int main(int argc, char* argv[]) {
 			predicate::by_name_ci, 
 			fs::current_path()
 		);
-        
+
+		print_config printConfig(Column::Number | Column::Name | Column::Date | Column::Size, -1);
+
 		fn::setup_config(argc, argv, config);
 
 		auto prio = config.get<Prioritizer>();
@@ -44,7 +46,7 @@ int main(int argc, char* argv[]) {
 		
 		std::sort(content.begin(), content.end(), [=](const auto& a, const auto& b) { return comp(a, b, prio, pred); });
 
-		fn::print_content(content);
+		fn::print_content(content, printConfig);
 	}
 	catch (const std::exception& ex) {
 		std::cerr << ex.what();

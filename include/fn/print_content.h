@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
 #include "Item.h"
+#include "print_config.h"
 
 namespace fn {
-	void print_content(std::vector<Item>);
+	void print_content(const std::vector<Item>&, const print_config&);
 }
