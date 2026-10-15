@@ -1,6 +1,6 @@
 # lspp
 
-lspp is a CLI tool for viewing directory contents and analyzing file sizes 
+lspp is a feature-rich CLI tool for directory inspection, metadata analysis, and customizable output.
 
 ## Features
 - Cross-platform
@@ -21,18 +21,37 @@ lspp is a CLI tool for viewing directory contents and analyzing file sizes
 ## Tested on...
 - Windows 10 x64
 - Windows 11 x64
-- Debian Linux x64
+- Debian Linux x64 (WSL)
 - Debian Linux ARM64
 - Oxygen OS Android ARM64 (via Termux)
 
 ## Installation
 No installation required.
-Simply download the latest version of `lspp`, unzip it with any program you want and you're good to go!
+Simply download the latest version of `lspp`, unzip it with any program you want and you're good to go! \
+Don't forget to add the executable file to your PATH so that you can run it from anywhere.
 
 ## Usage Examples
-### Sorting by size
+### Show directory contents
+Shows what is in directory. Doesn't measure directories' size.
 
-Measures recursively and sorts by total size:
+```bash
+$ lspp
+] .git                        14/10/2026    0 B
+] .lib                        31/08/2026    0 B
+] .vs                         14/10/2026    0 B
+] include                     14/10/2026    0 B
+] out                         23/12/2025    0 B
+] src                         14/10/2026    0 B
+] tests                       14/10/2026    0 B
+. .gitignore                  02/09/2026    10.0 B
+. CMakeLists.txt              14/10/2026    612 B
+. CMakePresets.json           31/07/2026    1.40 KB
+. LICENSE                     31/08/2026    1.04 KB
+. README.md                   14/10/2026    3.27 KB
+```
+
+### Sorting by size
+Measures recursively and sorts by total size.
 ```bash
 $ lspp -Rs
 ] .vs                           16/08/2026      346 MB
@@ -49,7 +68,7 @@ $ lspp -Rs
 423 MB total by 10 entries.
 ```
 ### Sorting by name
-Case sensitive sorting by name:
+Case sensitive sorting by name.
 ```bash
 $ lspp -c
 ] A                             16/08/2026      0 B
@@ -58,7 +77,7 @@ $ lspp -c
 ] C                             16/08/2026      0 B
 ] D                             16/08/2026      0 B
 ```
-Case insensitive sorting by name (default):
+Case insensitive sorting by name (default).
 ```
 $ lspp -i
 ] A                             16/08/2026      0 B
