@@ -1,6 +1,6 @@
 # lspp
 
-lspp is a feature-rich CLI tool for directory inspection, metadata analysis, and customizable output.
+A feature-rich CLI tool for directory inspection, metadata analysis, and customizable output.
 
 ## Features
 - Cross-platform
@@ -64,8 +64,6 @@ $ lspp -Rs
 . README.md                     25/03/2026      991 B
 . CMakeLists.txt                31/07/2026      556 B
 . .gitignore                    23/12/2025      10.0 B
-
-423 MB total by 10 entries.
 ```
 ### Sorting by name
 Case sensitive sorting by name.
