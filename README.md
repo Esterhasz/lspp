@@ -67,45 +67,22 @@ $ lspp -i
 ] D                             16/08/2026      0 B
 ] b1                            16/08/2026      0 B
 ```
-
 ## Arguments
-Long options use a double dash (`--`), while short options use a single dash (`-`). Shortened versions can be combined into a single argument (e.g., `-rf` is equivalent to `-r -f`).
 
-Reverse sorting order  
-`-r` \
-`--reversed`
+Long options use a double dash (`--`), while short options use a single dash (`-`). Short options can be combined into a single argument (e.g., `-rf` is equivalent to `-r -f`).
 
-Sort entries by name (case-sensitive)  
-`-c` \
-`--by-name-cs`
-
-Sort entries by name (case-insensitive)  
-`-i` \
-`--by-name-ci`
-
-Sort entries by file size  
-`-s` \
-`--by-size`
-
-Disable size measurement  
-`-m` \
-`--no-measure` 
-
-Measure directory sizes recursively  
-`-R` \
-`--recursive`
-
-Show files before directories  
-`-f` \
-`--file-first`
-
-Show directories before files  
-`-d` \
-`--dir-first`
-
-Do not prioritize files or directories  
-`-p` \
-`--no-priority`
+| Long option | Short option | Description |
+|---|---|---|
+| `--reversed` | `-r` | Reverse sorting order |
+| `--by-name-cs` | `-c` | Sort entries by name (case-sensitive) |
+| `--by-name-ci` | `-i` | Sort entries by name (case-insensitive) |
+| `--by-size` | `-s` | Sort entries by file size |
+| `--by-time` | `-t` | Sort entries by last modification time |
+| `--no-measure` | `-m` | Disable size measurement |
+| `--recursive` | `-R` | Measure directory sizes recursively |
+| `--file-first` | `-f` | Show files before directories |
+| `--dir-first` | `-d` | Show directories before files |
+| `--no-priority` | `-p` | Do not prioritize files or directories |
 
 # Self Build
 `lspp` relies only on standard C++ features, `CMake`, and `utf8proc` making it buildable on virtually any environment with a modern C++ compiler. If your OS isn't listed in `Supported on...`, you can try building `lspp` yourself.
