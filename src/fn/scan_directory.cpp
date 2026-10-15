@@ -19,7 +19,7 @@ namespace fn {
 
 			auto type = entry.status().type();
 
-			content.emplace_back(entry.path(), type, measurer(entry, type));
+			content.emplace_back(entry.path(), type, measurer(entry, type), entry.last_write_time());
 		}
 
 		return content;

@@ -4,14 +4,14 @@
 #include "predicate/by_name_cs.h"
 
 TEST_CASE("reverse test") {
-	Item a{ "a.txt", ItemType::regular, 0 };
-	Item b{ "b.txt", ItemType::regular, 0 };
+	Item a{ "a.txt", ItemType::regular, 0, LastWrite() };
+	Item b{ "b.txt", ItemType::regular, 0, LastWrite() };
 
 	REQUIRE(compare::reversed(a, b, priority::none, predicate::by_name_cs) == false);
 }
 TEST_CASE("reverse test (equal names)") {
-	Item a{ "b.txt", ItemType::regular, 0 };
-	Item b{ "b.txt", ItemType::regular, 0 };
+	Item a{ "b.txt", ItemType::regular, 0, LastWrite() };
+	Item b{ "b.txt", ItemType::regular, 0, LastWrite() };
 
 	REQUIRE(compare::reversed(a, b, priority::none, predicate::by_name_cs) == false);
 }

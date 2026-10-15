@@ -29,6 +29,7 @@ SetterMap fn::make_setter_map() {
     add_item(map, { "by-name-cs",     "c" }, set<predicate::by_name_cs>);
     add_item(map, { "by-name-ci",     "i" }, set<predicate::by_name_ci>);
     add_item(map, { "by-size",        "s" }, set<predicate::by_size>);
+    add_item(map, { "by-time",        "t" }, set<predicate::by_time>);
 
     add_item(map, { "file-first",     "f" }, set<priority::files>);
     add_item(map, { "dir-first",      "d" }, set<priority::directories>);

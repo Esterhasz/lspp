@@ -33,7 +33,7 @@ static std::string shorten_name(const std::string& str) {
 }
 
 static std::string get_name(const Item& item) {
-    std::string name = item.filename().u8string();
+    auto name = item.filename().u8string();
 
     size_t namelen = utf8::char_count(name);
 
