@@ -64,7 +64,11 @@ void fn::print_content(const std::vector<Item>& content, const print_config& con
     const size_t maxNumber = content.size();
     const size_t numberWidth = std::to_string(content.size()).size();
 
-    for (size_t i = 0; i < content.size(); ++i) {
+    const auto lineLimit = config.lineLimit == 0
+        ? content.size()
+        : std::min(config.lineLimit, content.size());
+
+    for (size_t i = 0; i < lineLimit; ++i) {
         auto& item = content[i];
         std::string line;
 

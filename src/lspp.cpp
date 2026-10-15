@@ -24,29 +24,31 @@ int main(int argc, char* argv[]) {
 		std::ios::sync_with_stdio(false);
 		std::cin.tie(nullptr);
 
+		auto printConfig = print_config(Column::Number | Column::Name | Column::Date | Column::Size, 0);
+
 		auto config = lspp_config(
 			measure::files,
 			priority::directories,
 			compare::normal,
 			predicate::by_name_ci, 
-			fs::current_path()
+			fs::current_path(),
+			printConfig
 		);
 
-		print_config printConfig(Column::Number | Column::Name | Column::Date | Column::Size, -1);
 
 		fn::setup_config(argc, argv, config);
 
-		auto prio = config.get<Prioritizer>();
-		auto pred = config.get<Predicate>();
-		auto meas = config.get<Measurer>();
-		auto comp = config.get<Comparator>();
-		auto base = config.get<fs::path>();
+		auto prio = config.prioritizer;
+		auto pred = config.predicate;
+		auto meas = config.measurer;
+		auto comp = config.comparator;
+		auto base = config.path;
 
 		auto content = fn::scan_directory(base, meas);
 		
 		std::sort(content.begin(), content.end(), [=](const auto& a, const auto& b) { return comp(a, b, prio, pred); });
 
-		fn::print_content(content, printConfig);
+		fn::print_content(content, config.print);
 	}
 	catch (const std::exception& ex) {
 		std::cerr << ex.what();
