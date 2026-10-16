@@ -36,53 +36,55 @@ Shows what is in directory. Doesn't measure directories' size.
 
 ```bash
 $ lspp
-] .git                        14/10/2026    0 B
-] .lib                        31/08/2026    0 B
-] .vs                         14/10/2026    0 B
-] include                     14/10/2026    0 B
-] out                         23/12/2025    0 B
-] src                         14/10/2026    0 B
-] tests                       14/10/2026    0 B
-. .gitignore                  02/09/2026    10.0 B
-. CMakeLists.txt              14/10/2026    612 B
-. CMakePresets.json           31/07/2026    1.40 KB
-. LICENSE                     31/08/2026    1.04 KB
-. README.md                   14/10/2026    3.27 KB
+ 1 ] .git
+ 2 ] .lib
+ 3 ] .vs
+ 4 ] include
+ 5 ] out
+ 6 ] src
+ 7 ] tests
+ 8 . .gitignore                  10    B
+ 9 . CMakeLists.txt              612   B
+10 . CMakePresets.json           1.40 KB
+11 . LICENSE                     1.04 KB
+12 . README.md                   4.18 KB
 ```
 
 ### Sorting by size
 Measures recursively and sorts by total size.
 ```bash
 $ lspp -Rs
-] .vs                           16/08/2026      346 MB
-] out                           23/12/2025      76.5 MB
-] .git                          16/08/2026      158 KB
-] src                           19/06/2026      8.01 KB
-] include                       05/03/2026      5.97 KB
-] media                         16/08/2026      1.90 KB
-. CMakePresets.json             31/07/2026      1.40 KB
-. README.md                     25/03/2026      991 B
-. CMakeLists.txt                31/07/2026      556 B
-. .gitignore                    23/12/2025      10.0 B
+ 1 ] .vs                         4.47 GB
+ 2 ] out                         154  MB
+ 3 ] .git                        31.6 MB
+ 4 ] .lib                        2.34 MB
+ 5 ] src                         11.5 KB
+ 6 ] include                     11.2 KB
+ 7 ] tests                       1.27 KB
+ 8 . README.md                   4.18 KB
+ 9 . CMakePresets.json           1.40 KB
+10 . LICENSE                     1.04 KB
+11 . CMakeLists.txt              612   B
+12 . .gitignore                  10    B
 ```
 ### Sorting by name
 Case sensitive sorting by name.
 ```bash
 $ lspp -c
-] A                             16/08/2026      0 B
-] B                             16/08/2026      0 B
-] b1                            16/08/2026      0 B
-] C                             16/08/2026      0 B
-] D                             16/08/2026      0 B
+1 ] A
+2 ] B
+3 ] b1
+4 ] C
+5 ] D
 ```
 Case insensitive sorting by name (default).
 ```
 $ lspp -i
-] A                             16/08/2026      0 B
-] B                             16/08/2026      0 B
-] C                             16/08/2026      0 B
-] D                             16/08/2026      0 B
-] b1                            16/08/2026      0 B
+1 ] A
+2 ] B
+3 ] C
+4 ] D
+5 ] b1
 ```
 ## Arguments
 
