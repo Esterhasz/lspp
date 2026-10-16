@@ -1,6 +1,6 @@
 #pragma once
 
-namespace fn {
+namespace output {
     static std::string get_human_size(uintmax_t size) {
         const char* units[] = { " B", "KB", "MB", "GB", "TB", "PB" };
 

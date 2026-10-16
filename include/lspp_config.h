@@ -1,13 +1,14 @@
 #pragma once
-#include "Measurer.h"
-#include "Prioritizer.h"
-#include "Comparator.h"
-#include "Predicate.h"
+#include "strategy/Measurer.h"
+#include "strategy/Prioritizer.h"
+#include "strategy/Comparator.h"
+#include "strategy/Predicate.h"
+#include "strategy/measure/all.h"
+#include "strategy/priority/all.h"
+#include "strategy/compare/all.h"
+#include "strategy/predicate/all.h"
+
 #include "print_config.h"
-#include "measure/all.h"
-#include "priority/all.h"
-#include "compare/all.h"
-#include "predicate/all.h"
 
 struct lspp_config {
 

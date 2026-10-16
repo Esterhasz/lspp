@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <chrono>
 
-namespace fn {
+namespace output {
     std::string format_time(std::filesystem::file_time_type ftime) {
         auto sctp = std::chrono::time_point_cast<
             std::chrono::system_clock::duration>(

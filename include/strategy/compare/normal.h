@@ -1,7 +1,7 @@
 #pragma once
 #include "Item.h"
-#include "Prioritizer.h"
-#include "Predicate.h"
+#include "strategy/Prioritizer.h"
+#include "strategy/Predicate.h"
 
 namespace compare {
 	inline bool normal(const Item& a, const Item& b, Prioritizer prioritize, Predicate compare) {

@@ -4,12 +4,14 @@
 #include <string_view>
 
 #include "fn/make_arguments.h"
-#include "fn/parse_size.h"
 
-#include "compare/all.h"
-#include "measure/all.h"
-#include "priority/all.h"
-#include "predicate/all.h"
+#include "strategy/compare/all.h"
+#include "strategy/measure/all.h"
+#include "strategy/priority/all.h"
+#include "strategy/predicate/all.h"
+
+#include <charconv>
+#include <stdexcept>
 
 using StringKeys = std::initializer_list<std::string_view>;
 
@@ -17,6 +19,27 @@ template<auto obj>
 void set(lspp_config& cfg) {
 	cfg.set(obj);
 }
+
+static std::size_t parse_size(std::string_view str) {
+    std::size_t value{};
+
+    auto [ptr, ec] = std::from_chars(
+        str.data(),
+        str.data() + str.size(),
+        value
+    );
+
+    if (ec != std::errc{} || ptr != str.data() + str.size()) {
+        throw std::invalid_argument("Invalid number: " + std::string(str));
+    }
+
+    return value;
+}
+
+void set_line_limit(lspp_config& cfg, std::string_view value) {
+    cfg.print.lineLimit = parse_size(value);
+}
+
 
 static inline Column parse_column_name(std::string_view name) {
     std::string lowercase(name);
@@ -28,10 +51,6 @@ static inline Column parse_column_name(std::string_view name) {
     if (lowercase == "line") return Column::Line;
 
     throw std::invalid_argument("Error: unknown column '" + std::string(name) + "'.");
-}
-
-static void set_line_limit(lspp_config& cfg, std::string_view value) {
-    cfg.print.lineLimit = fn::parse_size(value);
 }
 
 static void set_columns(lspp_config& cfg, std::string_view value_str) {
