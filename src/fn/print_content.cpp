@@ -8,26 +8,13 @@
 
 #include "utf8.h"
 
-constexpr size_t NAME_LENGTH_RESERVE = 24;
-
-// 3 less due to '...' adding
-constexpr size_t NAME_LEFT_PART = 11;
-constexpr size_t NAME_RIGHT_PART = 10;
-
-constexpr size_t DATE_LENGTH_RESERVE = 10;
-constexpr size_t SIZE_LENGTH_RESERVE = 3;
-
-constexpr size_t SPACES_FIRST_COLUMN = 4;
-constexpr size_t SPACES_SECOND_COLUMN = 4;
-
-
 static std::string shorten_name(const std::string& str) {
 
     std::string result{};
 
-    result += utf8::substring(str, 0, NAME_LEFT_PART);
+    result += utf8::substring(str, 0, print_config::NAME_LEFT_PART);
     result += "...";
-    result += utf8::substring(str, utf8::char_count(str) - NAME_RIGHT_PART, NAME_RIGHT_PART);
+    result += utf8::substring(str, utf8::char_count(str) - print_config::NAME_RIGHT_PART, print_config::NAME_RIGHT_PART);
 
     return result;
 }
@@ -37,10 +24,10 @@ static std::string get_name(const Item& item) {
 
     size_t namelen = utf8::char_count(name);
 
-    if (namelen > NAME_LENGTH_RESERVE)
+    if (namelen > print_config::NAME_LENGTH_RESERVE)
         name = shorten_name(name);
     else
-        name.append(NAME_LENGTH_RESERVE - namelen, ' ');
+        name.append(print_config::NAME_LENGTH_RESERVE - namelen, ' ');
 
     name = (item.type() == ItemType::directory
         ? "] "
@@ -55,9 +42,8 @@ void fn::print_content(const std::vector<Item>& content, const print_config& con
 
     std::string out;
     out.reserve(((uintmax_t)content.size()) * 
-        (NAME_LENGTH_RESERVE 
-        + DATE_LENGTH_RESERVE 
-        + SIZE_LENGTH_RESERVE));
+        (print_config::NAME_LENGTH_RESERVE
+        + print_config::DATE_LENGTH_RESERVE));
 
     uintmax_t totalSize = 0;
     
@@ -72,27 +58,35 @@ void fn::print_content(const std::vector<Item>& content, const print_config& con
         auto& item = content[i];
         std::string line;
 
-        if (Column::Number & config.columns) {
-            std::string number = std::to_string(i + 1);
-            number.insert(0, numberWidth - number.size(), ' ');
-            line += number + ' ';
-        }
-
-        if (Column::Name & config.columns) {
-            std::string name = get_name(item);
-            name.append(SPACES_FIRST_COLUMN, ' ');
-            line += name;
-        }
-
-        if (Column::Date & config.columns) {
-            std::string date = format_time(std::filesystem::last_write_time(item.path()));
-            date.append(SPACES_SECOND_COLUMN, ' ');
-            line += date;
-        }
-
-        if (Column::Size & config.columns) {
-            std::string size = item.size() < 1 ? "0 B" : get_human_size(item.size());
-            line += size;
+        for (size_t j = 0; j < config.columns.size(); j++)
+        {
+            switch (config.columns[j])
+            {
+                case Column::Line: {
+                    std::string number = std::to_string(i + 1);
+                    number.insert(0, numberWidth - number.size(), ' ');
+                    line += number + ' ';
+                    break;
+                }
+                case Column::Name: {
+                    std::string name = get_name(item);
+                    name.append(print_config::SPACES, ' ');
+                    line += name;
+                    break;
+                }
+                case Column::Date: {
+                    std::string date = format_time(std::filesystem::last_write_time(item.path()));
+                    date.append(print_config::SPACES, ' ');
+                    line += date;
+                    break;
+                }
+                case Column::Size: {
+                    std::string size = item.size() < 1 ? "        " : get_human_size(item.size());
+                    size.append(print_config::SPACES, ' ');
+                    line += size;
+                    break;
+                }
+            }
         }
 
         line += '\n';

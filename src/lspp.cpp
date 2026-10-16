@@ -24,17 +24,7 @@ int main(int argc, char* argv[]) {
 		std::ios::sync_with_stdio(false);
 		std::cin.tie(nullptr);
 
-		auto printConfig = print_config(Column::Number | Column::Name | Column::Date | Column::Size, 0);
-
-		auto config = lspp_config(
-			measure::files,
-			priority::directories,
-			compare::normal,
-			predicate::by_name_ci, 
-			fs::current_path(),
-			printConfig
-		);
-
+		auto config = lspp_config();
 
 		fn::setup_config(argc, argv, config);
 

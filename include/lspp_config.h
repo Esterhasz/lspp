@@ -4,36 +4,27 @@
 #include "Comparator.h"
 #include "Predicate.h"
 #include "print_config.h"
+#include "measure/all.h"
+#include "priority/all.h"
+#include "compare/all.h"
+#include "predicate/all.h"
 
 struct lspp_config {
-	Measurer	measurer;
-	Prioritizer prioritizer;
-	Comparator  comparator;
-	Predicate	predicate;
+
+	using Path = std::filesystem::path;
+
+	Measurer	measurer	= measure::files;
+	Prioritizer prioritizer = priority::directories;
+	Comparator  comparator	= compare::normal;
+	Predicate	predicate	= predicate::by_name_ci;
 	
-	std::filesystem::path path;
+	Path path = std::filesystem::current_path();
+	
+	print_config print{};
 
-	print_config print;
-
-	lspp_config(
-		Measurer measurer,
-		Prioritizer prioritizer,
-		Comparator comparator,
-		Predicate predicate,
-		std::filesystem::path path,
-		print_config print) :
-
-		measurer(std::move(measurer)),
-		prioritizer(std::move(prioritizer)),
-		comparator(std::move(comparator)),
-		predicate(std::move(predicate)),
-		path(std::move(path)),
-		print(std::move(print)) {
-	}
-
-	void set(Measurer value) { measurer = std::move(value); }
-	void set(Prioritizer value) { prioritizer = std::move(value); }
-	void set(Comparator value) { comparator = std::move(value); }
-	void set(Predicate value) { predicate = std::move(value); }
-	void set(std::filesystem::path value) { path = std::move(value); }
+	void set(Measurer value)	{ measurer		= std::move(value); }
+	void set(Prioritizer value) { prioritizer	= std::move(value); }
+	void set(Comparator value)	{ comparator	= std::move(value); }
+	void set(Predicate value)	{ predicate		= std::move(value); }
+	void set(Path value)		{ path			= std::move(value); }
 };

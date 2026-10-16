@@ -2,29 +2,27 @@
 
 namespace fn {
     static std::string get_human_size(uintmax_t size) {
-        const std::vector<std::string> units =
-        { "B", "KB", "MB", "GB", "TB", "PB" };
+        const char* units[] = { " B", "KB", "MB", "GB", "TB", "PB" };
 
-        double step = 1024.0;
-
-        double value = size;
+        double value = static_cast<double>(size);
         size_t unit = 0;
 
-        while (value >= step && unit < units.size() - 1) {
-            value /= step;
+        while (value >= 1024.0 && unit < 5) {
+            value /= 1024.0;
             unit++;
         }
 
-        char buffer[64];
-
-        if (value >= 100)
-            snprintf(buffer, sizeof(buffer), "%.0f %s", value, units[unit].c_str());
+        char number[16];
+        if (unit == 0 || value >= 100)
+            snprintf(number, sizeof(number), "%.0f", value);
         else if (value >= 10)
-            snprintf(buffer, sizeof(buffer), "%.1f %s", value, units[unit].c_str());
+            snprintf(number, sizeof(number), "%.1f", value);
         else
-            snprintf(buffer, sizeof(buffer), "%.2f %s", value, units[unit].c_str());
+            snprintf(number, sizeof(number), "%.2f", value);
 
-        return buffer;
+        char result[64];
+        snprintf(result, sizeof(result), "%-4s %s", number, units[unit]);
+
+        return result;
     }
-
 }
