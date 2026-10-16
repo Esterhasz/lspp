@@ -54,6 +54,8 @@ void fn::print_content(const std::vector<Item>& content, const print_config& con
         ? content.size()
         : std::min(config.lineLimit, content.size());
 
+    const auto spaces = print_config::SPACES;
+    
     for (size_t i = 0; i < lineLimit; ++i) {
         auto& item = content[i];
         std::string line;
@@ -70,19 +72,19 @@ void fn::print_content(const std::vector<Item>& content, const print_config& con
                 }
                 case Column::Name: {
                     std::string name = get_name(item);
-                    name.append(print_config::SPACES, ' ');
+                    name.append(spaces, ' ');
                     line += name;
                     break;
                 }
                 case Column::Date: {
                     std::string date = format_time(std::filesystem::last_write_time(item.path()));
-                    date.append(print_config::SPACES, ' ');
+                    date.append(spaces, ' ');
                     line += date;
                     break;
                 }
                 case Column::Size: {
                     std::string size = item.size() < 1 ? "        " : get_human_size(item.size());
-                    size.append(print_config::SPACES, ' ');
+                    size.append(spaces, ' ');
                     line += size;
                     break;
                 }
