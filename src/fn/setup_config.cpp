@@ -27,7 +27,7 @@ void fn::setup_config(int argc, char* argv[], lspp_config& config) {
                 arguments.begin(),
                 arguments.end(),
                 [flag](const Argument& arg) {
-                    return arg.shortName == flag;
+                    return arg.name == flag;
                 }
             );
 
@@ -90,7 +90,7 @@ void fn::setup_config(int argc, char* argv[], lspp_config& config) {
         auto setter = (*valuedSetters[i]);
 
         if (values.size() <= i)
-            throw std::invalid_argument("Error: not enough parameters");
+            throw std::invalid_argument("Error: not enough parameters.");
 
         auto value = values[i];
         setter(config, value);
