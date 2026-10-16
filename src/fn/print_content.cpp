@@ -83,9 +83,14 @@ void fn::print_content(const std::vector<Item>& content, const print_config& con
                     break;
                 }
                 case Column::Size: {
-                    std::string size = item.size() < 1 ? "        " : get_human_size(item.size());
-                    size.append(spaces, ' ');
-                    line += size;
+                    
+                    if (item.size() > 0)
+                        line += get_human_size(item.size());
+                    else
+                        line.append(print_config::SIZE_LENGTH_BLANK, ' ');
+
+                    line.append(spaces, ' ');
+                    
                     break;
                 }
             }

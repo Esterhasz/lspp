@@ -17,6 +17,7 @@ struct print_config {
     static constexpr size_t NAME_RIGHT_PART = 10;
 
     static constexpr size_t DATE_LENGTH_RESERVE = 10;
+    static constexpr size_t SIZE_LENGTH_BLANK = 7;
     
     static constexpr size_t SPACES = 4;
 
