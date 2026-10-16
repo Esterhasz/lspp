@@ -1,5 +1,6 @@
 #pragma once
 #include <filesystem>
+#include <optional>
 
 using ItemType = std::filesystem::file_type;
 using Path = std::filesystem::path;
@@ -11,11 +12,11 @@ class Item {
 private:
 	Path _path;
 	ItemType _type;
-	uintmax_t _size;
+	std::optional<uintmax_t> _size;
 	LastWrite _lastWrite;
 	
 public:
-	Item(const Path& path, ItemType type, uintmax_t size, LastWrite lastWrite) : 
+	Item(const Path& path, ItemType type, std::optional<uintmax_t> size, LastWrite lastWrite) : 
 		_size(size), 
 		_path(path), 
 		_type(type), 
@@ -31,7 +32,7 @@ public:
 	Path filename() const {
 		return path().filename();
 	}
-	uintmax_t size() const {
+	std::optional<uintmax_t> size() const {
 		return _size;
 	}
 	LastWrite last_write() const {

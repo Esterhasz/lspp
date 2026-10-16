@@ -3,7 +3,7 @@
 #include "fn/directory_size.h"
 
 namespace measure {
-	inline uintmax_t recursive(const std::filesystem::directory_entry& entry, std::filesystem::file_type type) {
+	inline std::optional<uintmax_t> recursive(const std::filesystem::directory_entry& entry, std::filesystem::file_type type) {
 		namespace fs = std::filesystem;
 		
 		if (type == fs::file_type::directory)
@@ -15,6 +15,6 @@ namespace measure {
 		if (!e)
 			return size;
 
-		return 0;
+		return std::nullopt; 
 	}
 }

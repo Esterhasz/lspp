@@ -1,12 +1,13 @@
 #pragma once
 #include <filesystem>
+#include <optional>
 
 namespace measure {
-	inline uintmax_t files(const std::filesystem::directory_entry& entry, std::filesystem::file_type type) {
+	inline std::optional<uintmax_t> files(const std::filesystem::directory_entry& entry, std::filesystem::file_type type) {
 		namespace fs = std::filesystem;
 		
 		if (type == fs::file_type::directory)
-			return 0;
+			return std::nullopt;
 		
 		std::error_code e;
 		auto size = entry.file_size(e);
@@ -14,6 +15,6 @@ namespace measure {
 		if (!e)
 			return size;
 
-		return 0;
+		return std::nullopt;
 	}
 }

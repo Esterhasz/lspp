@@ -84,8 +84,10 @@ void fn::print_content(const std::vector<Item>& content, const print_config& con
                 }
                 case Column::Size: {
                     
-                    if (item.size() > 0)
-                        line += get_human_size(item.size());
+                    auto size = item.size();
+
+                    if (size.has_value())
+                        line += get_human_size(size.value());
                     else
                         line.append(print_config::SIZE_LENGTH_BLANK, ' ');
 

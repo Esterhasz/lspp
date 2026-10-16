@@ -1,11 +1,6 @@
 ﻿#include <filesystem>
 #include <iostream>
 
-#include "measure/all.h"
-#include "priority/all.h"
-#include "predicate/all.h"
-#include "compare/all.h"
-
 #include <algorithm>
 
 #include "fn/scan_directory.h"
