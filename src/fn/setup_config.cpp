@@ -17,6 +17,8 @@ void fn::setup_config(int argc, char* argv[], lspp_config& config) {
     std::vector<ValuedSetter*> valuedSetters{};
     std::vector<std::string_view> values{};
 
+    config.executablePath = argv[0];
+
     for (size_t i = 1; i < argc; ++i) {
         std::string_view arg = argv[i];
 

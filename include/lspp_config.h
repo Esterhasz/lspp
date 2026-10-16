@@ -19,7 +19,8 @@ struct lspp_config {
 	Predicate	predicate	= predicate::by_name_ci;
 	
 	Path path = std::filesystem::current_path();
-	
+	Path executablePath{};
+
 	print_config print{};
 
 	void set(Measurer value)	{ measurer		= std::move(value); }
