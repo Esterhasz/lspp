@@ -16,9 +16,10 @@ file(GLOB_RECURSE SRC_FILES
 add_executable(lspp_tests 
     ${SRC_FILES}
     "../.lib/utf8proc/utf8proc.c"
+    "../.lib/whereami/whereami.c"
+
     reverse_test.cpp
 )
-
     
 target_include_directories(lspp_tests PRIVATE "../.lib/")
 target_compile_definitions(lspp_tests PRIVATE UTF8PROC_STATIC)

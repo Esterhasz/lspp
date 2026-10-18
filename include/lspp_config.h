@@ -14,13 +14,16 @@ struct lspp_config {
 
 	using Path = std::filesystem::path;
 
+	static constexpr char CONFIG_FILENAME[] = "config.txt";
+	static constexpr uint8_t V_CAP = 16;
+
 	Measurer	measurer	= measure::files;
 	Prioritizer prioritizer = priority::directories;
 	Comparator  comparator	= compare::normal;
 	Predicate	predicate	= predicate::by_name_ci;
 	
 	Path path = std::filesystem::current_path();
-	Path executablePath{};
+	Path executableDir{};
 
 	print_config print{};
 

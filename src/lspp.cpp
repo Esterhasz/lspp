@@ -6,13 +6,21 @@
 #include "fn/scan_directory.h"
 #include "output/print_content.h"
 #include "fn/setup_config.h"
+#include "fn/load_config.h"
+#include "fn/executable_path.h"
+
+#if defined(_WIN32) || defined(_WIN64)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#endif
 
 namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
 
 #if defined(_WIN32) || defined(_WIN64)
-	std::system("chcp 65001 > nul");
+	SetConsoleOutputCP(65001);
+	SetConsoleCP(65001);
 #endif
 
 	try {
@@ -21,7 +29,21 @@ int main(int argc, char* argv[]) {
 
 		auto config = lspp_config();
 
-		fn::setup_config(argc, argv, config);
+		std::string buffer{ argv[0], '\0'};
+		buffer.reserve(256);
+
+		std::filesystem::path& executableDir = config.executableDir;
+
+		if (fn::executable_path(executableDir)) {
+			fn::load_config((executableDir / lspp_config::CONFIG_FILENAME), buffer);
+		}
+		
+		for (int i = 1; i < argc; ++i) {
+			buffer.append(argv[i]);
+			buffer.push_back('\0');
+		}
+
+		fn::setup_config(buffer, config);
 
 		auto prio = config.prioritizer;
 		auto pred = config.predicate;

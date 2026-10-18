@@ -2,25 +2,36 @@
 #include "fn/make_arguments.h"
 #include <filesystem>
 #include <stdexcept>
+#include <string>
+#include <string_view>
 
 namespace fs = std::filesystem;
-
 
 static void throw_invalid_argument(const std::string& arg) {
     throw std::invalid_argument("Error: unknown argument '" + arg + "'.");
 }
 
-void fn::setup_config(int argc, char* argv[], lspp_config& config) {
+void fn::setup_config(std::string_view buffer, lspp_config& config) {
 
     auto arguments = fn::make_arguments();
 
-    std::vector<ValuedSetter*> valuedSetters{};
-    std::vector<std::string_view> values{};
+    constexpr uint8_t vcap = lspp_config::V_CAP;
+    uint8_t paramIndex = 0;
+    uint8_t setterIndex = 0;
 
-    config.executablePath = argv[0];
+    std::string_view parameters[vcap];
+    ValuedSetter* setters[vcap];
 
-    for (size_t i = 1; i < argc; ++i) {
-        std::string_view arg = argv[i];
+    size_t pos = 0;
+
+    while (pos < buffer.size()) {
+        size_t end = buffer.find('\0', pos);
+
+        if (end == std::string_view::npos)
+            end = buffer.size();
+
+        std::string_view arg = buffer.substr(pos, end - pos);
+        pos = end + 1;
 
         if (arg.rfind("--", 0) == 0) {
             std::string_view flag = arg.substr(2);
@@ -37,14 +48,14 @@ void fn::setup_config(int argc, char* argv[], lspp_config& config) {
                 auto& setter = it->setter;
 
                 if (auto fn = std::get_if<ValuedSetter>(&it->setter)) {
-                    valuedSetters.push_back(fn);
+                    setters[setterIndex++] = fn;
                 }
                 else if (auto fn = std::get_if<UnvaluedSetter>(&it->setter)) {
                     (*fn)(config);
                 }
             }
             else {
-                throw_invalid_argument(argv[i]);
+                throw_invalid_argument(std::string(arg));
             }
         }
         else if (arg.rfind("-", 0) == 0 && arg.size() > 1) {
@@ -65,7 +76,7 @@ void fn::setup_config(int argc, char* argv[], lspp_config& config) {
                     auto& setter = it->setter;
 
                     if (auto fn = std::get_if<ValuedSetter>(&it->setter)) {
-                        valuedSetters.push_back(fn);
+                        setters[setterIndex++] = fn;
                     }
                     else if (auto fn = std::get_if<UnvaluedSetter>(&it->setter)) {
                         (*fn)(config);
@@ -84,17 +95,17 @@ void fn::setup_config(int argc, char* argv[], lspp_config& config) {
             config.set(fs::path(arg));
         }
         else {
-            values.push_back(arg);
+            parameters[paramIndex++] = arg;
         }
     }
 
-    for (size_t i = 0; i < valuedSetters.size(); i++) {
-        auto setter = (*valuedSetters[i]);
+    for (size_t i = 0; i < setterIndex; i++) {
+        auto setter = (*setters[i]);
 
-        if (values.size() <= i)
+        if (vcap <= i)
             throw std::invalid_argument("Error: not enough parameters.");
 
-        auto value = values[i];
+        auto value = parameters[i];
         setter(config, value);
     }
 }
