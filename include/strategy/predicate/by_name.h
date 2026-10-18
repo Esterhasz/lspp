@@ -1,5 +1,5 @@
 #pragma once
-#include <utf8proc.h>
+#include <utf8proc/utf8proc.h>
 #include "utf8.h"
 #include "Item.h"
 

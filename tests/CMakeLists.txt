@@ -15,7 +15,7 @@ file(GLOB_RECURSE SRC_FILES
 
 add_executable(lspp_tests 
     ${SRC_FILES}
-    "../.lib/utf8proc.c"
+    "../.lib/utf8proc/utf8proc.c"
     reverse_test.cpp
 )
 

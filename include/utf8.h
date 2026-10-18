@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <utf8proc.h>
+#include <utf8proc/utf8proc.h>
 
 namespace utf8 {
 

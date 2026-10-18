@@ -16,7 +16,8 @@ file(GLOB_RECURSE SRC_FILES
 
 add_executable(lspp
     ${SRC_FILES}
-    ".lib/utf8proc.c"
+    ".lib/utf8proc/utf8proc.c"
+    ".lib/whereami/whereami.c"
 )
 
 target_include_directories(lspp PRIVATE ".lib/")
