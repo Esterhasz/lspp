@@ -13,6 +13,7 @@ A feature-rich CLI tool for directory inspection, metadata analysis, and customi
 - ✅ Windows x64
 - ✅ Windows x32
 - ✅ Linux x64
+- ✅ Linux x32
 - ✅ Linux ARM64
 - ✅ Android ARM64
 
@@ -67,25 +68,13 @@ $ lspp -Rs
 11 . CMakeLists.txt              612   B
 12 . .gitignore                  10    B
 ```
-### Sorting by name
-Case sensitive sorting by name.
+
+## Customizing columns
+You can freely change column order and visibility using -C. Only the chosen columns will be displayed.
 ```bash
-$ lspp -c
-1 ] A
-2 ] B
-3 ] b1
-4 ] C
-5 ] D
+$ lspp -C line,name,date,size
 ```
-Case insensitive sorting by name (default).
-```
-$ lspp -i
-1 ] A
-2 ] B
-3 ] C
-4 ] D
-5 ] b1
-```
+_Default appearance:_ `line,name,size`
 ## Arguments
 
 Long options use a double dash (`--`), while short options use a single dash (`-`). Short options can be combined into a single argument (e.g., `-rf` is equivalent to `-r -f`).
@@ -102,9 +91,18 @@ Long options use a double dash (`--`), while short options use a single dash (`-
 | `--file-first` | `-f` | Show files before directories |
 | `--dir-first` | `-d` | Show directories before files |
 | `--no-priority` | `-p` | Do not prioritize files or directories |
+| `--lines` | `-l` | Set the maximum amount of lines (e.g. `-l 5`) |
+| `--columns` | `-C` | Set column order & visibility (e.g. `-C line,name,date,size`) |
+
+## Config
+You can set up a config to make chosen arguments default. Here's how: 
+1. Create a `config.txt` file in the same directory where `lspp` is located.
+2. Enter all the arguments you want to be default (e.g., `--dir-first --no-measure` or `-dm`).
+3. Save the file.
+Arguments passed via command line will override or apply in addition to the config. For example, if you run `lspp -R`, it will enable recursive measurement even if your config states not to measure.
 
 # Self Build
-`lspp` relies only on standard C++ features, `CMake`, and `utf8proc` making it buildable on virtually any environment with a modern C++ compiler. If your OS isn't listed in `Supported on...`, you can try building `lspp` yourself.
+The project relies only on standard C++ features, `CMake`, `utf8proc` and `whereami` making it buildable on virtually any environment with a modern C++ compiler. If your OS isn't listed in `Supported on...`, you can try building `lspp` yourself.
 All you need is: 
 - CMake 3.20 or higher
 - A C++ compiler (clang, MSVC, etc.)
