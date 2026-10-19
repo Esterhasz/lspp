@@ -1,6 +1,7 @@
 #pragma once
 #include <variant>
 #include <string_view>
+#include <vector>
 #include "lspp_config.h"
 
 namespace fn {

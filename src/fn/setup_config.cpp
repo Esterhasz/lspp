@@ -1,9 +1,9 @@
-#include "fn/setup_config.h"
-#include "fn/make_arguments.h"
 #include <filesystem>
 #include <stdexcept>
 #include <string>
-#include <string_view>
+#include <algorithm>
+#include "fn/setup_config.h"
+#include "fn/make_arguments.h"
 
 namespace fs = std::filesystem;
 
