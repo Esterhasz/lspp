@@ -1,6 +1,5 @@
 # lspp
-
-A feature-rich CLI tool for directory inspection, metadata analysis, and customizable output.
+**One standalone binary for complete, cross-platform directory analysis.**
 
 ## Features
 - Cross-platform
@@ -17,14 +16,7 @@ A feature-rich CLI tool for directory inspection, metadata analysis, and customi
 - ✅ Linux ARM64
 - ✅ Android ARM64
 
-(if your system isn't listed here, you can try [building yourself](#self-build))
-
-## Tested on...
-- Windows 10 x64
-- Windows 11 x64
-- Debian Linux x64 (WSL)
-- Debian Linux ARM64
-- Oxygen OS Android ARM64 (via Termux)
+Or almost any other system if you [build it yourself](#self-build)
 
 ## Installation
 No installation required.
@@ -101,17 +93,17 @@ You can set up a config to make chosen arguments default. Here's how:
 3. Save the file.
 Arguments passed via command line will override or apply in addition to the config. For example, if you run `lspp -R`, it will enable recursive measurement even if your config states not to measure.
 
-# Self Build
-The project relies only on standard C++ features, `CMake`, `utf8proc` and `whereami` making it buildable on virtually any environment with a modern C++ compiler. If your OS isn't listed in `Supported on...`, you can try building `lspp` yourself.
-All you need is: 
-- CMake 3.20 or higher
-- A C++ compiler (clang, MSVC, etc.)
+## Self Build
+If your OS isn't listed above, you can compile `lspp` manually. It relies only on standard C++, CMake, `utf8proc`, and `whereami` with zero complex setup.
 
-## Steps to build
-1. Clone the repository
-2. Configure with CMake
-`cmake -B build -DCMAKE_BUILD_TYPE=Release`
-3. Build the binary
-`cmake --build build --config Release`
+Make sure you have:
+- **CMake**: 3.20 or higher
+- **Compiler**: C++17 or higher
 
-You're done! 
+And then, just execute the following commands in your terminal:
+```bash
+git clone https://github.com/Esterhasz/lspp.git
+cd lspp
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+```
