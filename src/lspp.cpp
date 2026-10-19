@@ -35,7 +35,9 @@ int main(int argc, char* argv[]) {
 		std::filesystem::path& executableDir = config.executableDir;
 
 		if (fn::executable_path(executableDir)) {
-			fn::load_config((executableDir / lspp_config::CONFIG_FILENAME), buffer);
+
+			std::filesystem::path configPath = (executableDir / lspp_config::CONFIG_FILENAME);
+			fn::load_config(configPath, buffer);
 		}
 		
 		for (int i = 1; i < argc; ++i) {
