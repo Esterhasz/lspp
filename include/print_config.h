@@ -1,27 +1,30 @@
 #pragma once
 #include <vector>
+#include <cstddef>
 
 enum Column {
-	Name = 1, 
-	Date = 1 << 1,
-	Size = 1 << 2,
-	Line = 1 << 3,
+    Name = 1,
+    Date = 1 << 1,
+    Size = 1 << 2,
+    Line = 1 << 3,
 };
 
 inline Column operator|(Column a, Column b) {
-	return static_cast<Column>(static_cast<int>(a) | static_cast<int>(b));
+    return static_cast<Column>(
+        static_cast<int>(a) | static_cast<int>(b)
+        );
 }
 
 struct print_config {
-    static constexpr size_t NAME_LENGTH_RESERVE = 24;
-    static constexpr size_t NAME_LEFT_PART = 11;
-    static constexpr size_t NAME_RIGHT_PART = 10;
 
-    static constexpr size_t DATE_LENGTH_RESERVE = 10;
-    static constexpr size_t SIZE_LENGTH_BLANK = 7;
-    
-    static constexpr size_t SPACES = 4;
+    size_t sizeLengthReserve = 7;
+    size_t nameLengthReserve = 24;
+    size_t dateLengthReserve = 10;
+    size_t spacing = 4;
 
-    std::vector<Column> columns = { Column::Line, Column::Name, Column::Size };
+    std::vector<Column> columns = {
+        Column::Line, Column::Name, Column::Size
+    };
+
     size_t lineLimit = 0;
 };

@@ -9,26 +9,27 @@
 #include "utf8.h"
 
 namespace output {
-    static std::string shorten_name(const std::string& str) {
+    static std::string shorten_name(const std::string& str, size_t reserve) {
+        const size_t left = (reserve - 3 + 1) / 2;
+        const size_t right = (reserve - 3) / 2;
+        const size_t length = utf8::char_count(str);
 
-        std::string result{};
-
-        result += utf8::substring(str, 0, print_config::NAME_LEFT_PART);
+        std::string result;
+        result += utf8::substring(str, 0, left);
         result += "...";
-        result += utf8::substring(str, utf8::char_count(str) - print_config::NAME_RIGHT_PART, print_config::NAME_RIGHT_PART);
+        result += utf8::substring(str, length - right, right);
 
         return result;
     }
 
-    static std::string get_name(const Item& item) {
+    static std::string get_name(const Item& item,size_t reserve) {
         auto name = item.filename().u8string();
+        const size_t length = utf8::char_count(name);
 
-        size_t namelen = utf8::char_count(name);
-
-        if (namelen > print_config::NAME_LENGTH_RESERVE)
-            name = shorten_name(name);
-        else
-            name.append(print_config::NAME_LENGTH_RESERVE - namelen, ' ');
+        if (length > reserve && reserve >= 3)
+            name = shorten_name(name, reserve);
+        else if (length < reserve)
+            name.append(reserve - length, ' ');
 
         name = (item.type() == ItemType::directory
             ? "] "
@@ -38,13 +39,27 @@ namespace output {
         return name;
     }
 
-
     void print_content(const std::vector<Item>& content, const print_config& config) {
 
-        std::string out;
-        out.reserve(((uintmax_t)content.size()) *
-            (print_config::NAME_LENGTH_RESERVE + print_config::DATE_LENGTH_RESERVE));
+        size_t nameReserve = config.nameLengthReserve;
 
+        if (nameReserve == 0) {
+            for (const auto& item : content) {
+                const auto name = item.filename().u8string();
+                nameReserve = std::max(
+                    nameReserve,
+                    utf8::char_count(name)
+                );
+            }
+        }
+
+        std::string out;
+        out.reserve(
+            static_cast<uintmax_t>(content.size()) *
+            (nameReserve + config.dateLengthReserve)
+        );
+
+        const auto spacing = config.spacing;
         uintmax_t totalSize = 0;
 
         const size_t maxNumber = content.size();
@@ -53,8 +68,6 @@ namespace output {
         const auto lineLimit = config.lineLimit == 0
             ? content.size()
             : std::min(config.lineLimit, content.size());
-
-        const auto spaces = print_config::SPACES;
 
         for (size_t i = 0; i < lineLimit; ++i) {
             auto& item = content[i];
@@ -71,14 +84,14 @@ namespace output {
                         break;
                     }
                     case Column::Name: {
-                        std::string name = get_name(item);
-                        name.append(spaces, ' ');
+                        std::string name = get_name(item, nameReserve);
+                        name.append(spacing, ' ');
                         line += name;
                         break;
                     }
                     case Column::Date: {
                         std::string date = format_time(std::filesystem::last_write_time(item.path()));
-                        date.append(spaces, ' ');
+                        date.append(spacing, ' ');
                         line += date;
                         break;
                     }
@@ -89,9 +102,9 @@ namespace output {
                         if (size.has_value())
                             line += get_human_size(size.value());
                         else
-                            line.append(print_config::SIZE_LENGTH_BLANK, ' ');
+                            line.append(config.sizeLengthReserve, ' ');
 
-                        line.append(spaces, ' ');
+                        line.append(spacing, ' ');
 
                         break;
                     }
