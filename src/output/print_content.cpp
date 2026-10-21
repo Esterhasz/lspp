@@ -90,7 +90,7 @@ namespace output {
                         break;
                     }
                     case Column::Date: {
-                        std::string date = format_time(std::filesystem::last_write_time(item.path()));
+                        std::string date = format_time(item.last_write());
                         date.append(spacing, ' ');
                         line += date;
                         break;
