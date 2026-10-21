@@ -1,6 +1,6 @@
 #include "fn/directory_size.h"
 
-uintmax_t fn::directory_size(const std::filesystem::path p) {
+uintmax_t fn::directory_size(const std::filesystem::path& p) {
 	namespace fs = std::filesystem;
 
 	std::error_code ec;

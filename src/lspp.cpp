@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 
 		auto config = lspp_config();
 
-		std::string buffer{ argv[0], '\0'};
+		std::string buffer{argv[0], '\0'};
 		buffer.reserve(256);
 
 		std::filesystem::path& executableDir = config.executableDir;
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
 		auto pred = config.predicate;
 		auto meas = config.measurer;
 		auto comp = config.comparator;
-		auto base = config.path;
+		auto& base = config.path;
 
 		auto content = fn::scan_directory(base, meas);
 		

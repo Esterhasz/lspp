@@ -2,7 +2,7 @@
 #include "Item.h"
 
 namespace fn {
-	std::vector<Item> scan_directory(Path path, Measurer measurer) {
+	std::vector<Item> scan_directory(std::filesystem::path& p, Measurer measurer) {
 		namespace fs = std::filesystem;
 
 		std::vector<Item> content{};
@@ -13,7 +13,7 @@ namespace fn {
 		std::error_code ec;
 
 		for (auto& entry : fs::directory_iterator(
-			path, 
+			p, 
 			fs::directory_options::skip_permission_denied, 
 			ec)) {
 

@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
+#include <filesystem>
 #include "strategy/Measurer.h"
-#include "Item.h"
+
+class Item;
 
 namespace fn {
 
-	std::vector<Item> scan_directory(Path, Measurer);
+	std::vector<Item> scan_directory(std::filesystem::path&, Measurer);
 }
