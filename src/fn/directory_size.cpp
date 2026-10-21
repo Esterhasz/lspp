@@ -20,7 +20,15 @@ uintmax_t fn::directory_size(const std::filesystem::path p) {
 		}
 
 		if (it->is_regular_file(ec)) {
-			size += it->file_size(ec);
+			
+			uintmax_t fileSize = it->file_size(ec);
+
+			if (ec) {
+				ec.clear();
+				continue;
+			}
+
+			size += fileSize;
 		}
 	}
 
