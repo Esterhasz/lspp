@@ -17,11 +17,13 @@ inline Column operator|(Column a, Column b) {
 
 struct print_config {
 
-    size_t sizeLengthReserve = 7;
-    size_t nameLengthReserve = 24;
-    size_t dateLengthReserve = 10;
-    size_t spacing = 4;
+    uint8_t sizeLengthReserve = 7;
+    uint8_t nameLengthReserve = 24;
+    uint8_t dateLengthReserve = 10;
+    uint8_t spacing = 4;
 
+    const std::string splitter = "~";
+    
     std::vector<Column> columns = {
         Column::Line, Column::Name, Column::Size
     };

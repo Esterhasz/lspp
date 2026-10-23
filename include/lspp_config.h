@@ -15,7 +15,8 @@ struct lspp_config {
 	using Path = std::filesystem::path;
 
 	static constexpr char CONFIG_FILENAME[] = "config.txt";
-	static constexpr uint8_t V_CAP = 16;
+	static constexpr uint8_t VALUED_ARGS_CAP = 16;
+	static constexpr uint8_t NAME_WIDTH_MIN = 5;
 
 	Measurer	measurer	= measure::files;
 	Prioritizer prioritizer = priority::directories;
