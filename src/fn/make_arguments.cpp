@@ -34,7 +34,6 @@ static std::size_t parse_size(std::string_view str) {
     return value;
 }
 
-
 namespace fn {
     std::vector<Argument> make_arguments() {
         
