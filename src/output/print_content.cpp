@@ -7,40 +7,9 @@
 #include "output/get_human_size.h"
 #include "lspp_config.h"
 #include "utf8.h"
+#include "output/get_name.h"
 
 namespace output {
-    static std::string shorten_name(const std::string& str, size_t reserve, const std::string& splitter) {
-        const auto splitSize = splitter.size();
-
-        const size_t left = (reserve - splitSize + 1) / 2;
-        const size_t right = (reserve - splitSize) / 2;
-        const size_t length = utf8::char_count(str);
-
-        std::string result;
-        result += utf8::substring(str, 0, left);
-        result += splitter;
-        result += utf8::substring(str, length - right, right);
-
-        return result;
-    }
-
-    static std::string get_name(const Item& item, size_t reserve, const std::string& splitter) {
-        auto name = item.filename().u8string();
-        const size_t length = utf8::char_count(name);
-
-        if (length > reserve)
-            name = shorten_name(name, reserve, splitter);
-        else if (length < reserve)
-            name.append(reserve - length, ' ');
-            
-        name = (item.type() == ItemType::directory
-            ? "] "
-            : ". ")
-            + name;
-
-        return name;
-    }
-
     void print_content(const std::vector<Item>& content, const print_config& config) {
 
         size_t nameReserve = config.nameLengthReserve;
