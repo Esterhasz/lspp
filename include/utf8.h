@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <utf8proc/utf8proc.h>
+#include <stdexcept>
 
 namespace utf8 {
 
@@ -17,45 +18,70 @@ namespace utf8 {
         return result;
     }
 
-    inline size_t char_length(unsigned char c) {
-        if ((c & 0x80) == 0x00) return 1;
-        if ((c & 0xE0) == 0xC0) return 2;
-        if ((c & 0xF0) == 0xE0) return 3;
-        if ((c & 0xF8) == 0xF0) return 4;
-        return 1;
+    inline size_t char_length(const std::string& str, size_t pos, utf8proc_int32_t& codepoint) {
+        utf8proc_ssize_t len = utf8proc_iterate(
+            reinterpret_cast<const utf8proc_uint8_t*>(str.data() + pos),
+            str.size() - pos,
+            &codepoint
+        );
+
+        if (len < 0)
+            throw std::invalid_argument("Error: invalid UTF-8.");
+
+        return static_cast<size_t>(len);
     }
 
     inline size_t char_count(const std::string& str) {
-        size_t p = 0;
         size_t count = 0;
-        while (p < str.size()) {
-            p += char_length(str[p]);
-            ++count;
+        size_t pos = 0;
+        utf8proc_int32_t prev = 0;
+        utf8proc_int32_t curr = 0;
+        utf8proc_int32_t state = 0;
+
+        while (pos < str.size()) {
+            size_t len = char_length(str, pos, curr);
+
+            if (count == 0 ||
+                utf8proc_grapheme_break_stateful(prev, curr, &state)) {
+                ++count;
+            }
+
+            prev = curr;
+            pos += static_cast<size_t>(len);
         }
 
         return count;
     }
 
     inline std::string substring(const std::string& str, size_t offset, size_t count) {
+        size_t pos = 0;
         size_t charCount = 0;
-        size_t p = 0;
+        size_t start = str.size();
+        utf8proc_int32_t prev = 0;
+        utf8proc_int32_t curr = 0;
+        utf8proc_int32_t state = 0;
 
-        std::string result{};
+        while (pos < str.size()) {
+            utf8proc_ssize_t len = char_length(str, pos, curr);
 
-        for (size_t i = 0; i < offset; ++i) {
-            p += char_length(str[p]);
+            if (charCount == 0 || utf8proc_grapheme_break_stateful(prev, curr, &state)) {
+
+                if (charCount == offset)
+                    start = pos;
+
+                if (charCount == offset + count)
+                    return str.substr(start, pos - start);
+
+                ++charCount;
+            }
+
+            prev = curr;
+            pos += static_cast<size_t>(len);
         }
 
-        for (; p < str.size() && charCount < count; ) {
-            charCount++;
-            char c = str[p];
+        if (offset >= charCount)
+            return {};
 
-            size_t len = char_length(str[p]);
-
-            result.append(str, p, len);
-            p += len;
-        }
-
-        return result;
+        return str.substr(start);
     }
 }
