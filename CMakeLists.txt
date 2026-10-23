@@ -22,3 +22,9 @@ add_executable(lspp
 
 target_include_directories(lspp PRIVATE ".lib/")
 target_compile_definitions(lspp PRIVATE UTF8PROC_STATIC)
+
+option(LSPP_BUILD_TESTS "Build tests" ON)
+
+if(LSPP_BUILD_TESTS)
+    add_subdirectory(testing)
+endif()
