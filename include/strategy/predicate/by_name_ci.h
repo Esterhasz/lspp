@@ -3,7 +3,8 @@
 
 static constexpr utf8proc_option_t OPTIONS_CASE_INSENSITIVE = (utf8proc_option_t)(
 	UTF8PROC_STABLE |
-	UTF8PROC_COMPOSE);
+	UTF8PROC_COMPOSE |
+	UTF8PROC_CASEFOLD);
 
 namespace predicate {
 	inline bool by_name_ci(const Item& a, const Item& b) {
