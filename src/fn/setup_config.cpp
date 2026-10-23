@@ -15,7 +15,7 @@ void fn::setup_config(std::string_view buffer, lspp_config& config) {
 
     auto arguments = fn::make_arguments();
 
-    constexpr uint8_t vcap = lspp_config::V_CAP;
+    constexpr uint8_t vcap = lspp_config::VALUED_ARGS_CAP;
     uint8_t paramIndex = 0;
     uint8_t setterIndex = 0;
 
@@ -76,6 +76,9 @@ void fn::setup_config(std::string_view buffer, lspp_config& config) {
                     auto& setter = it->setter;
 
                     if (auto fn = std::get_if<ValuedSetter>(&it->setter)) {
+                        if (setterIndex > vcap)
+                            throw std::invalid_argument("Error: maximum amount of valued arguments is " + std::to_string(vcap) + ". ");
+
                         setters[setterIndex++] = fn;
                     }
                     else if (auto fn = std::get_if<UnvaluedSetter>(&it->setter)) {
@@ -95,15 +98,19 @@ void fn::setup_config(std::string_view buffer, lspp_config& config) {
             config.set(fs::path(arg));
         }
         else {
+            if (paramIndex > vcap)
+                throw std::invalid_argument("Error: maximum amount of valued arguments is " + std::to_string(vcap) + ". ");
+
             parameters[paramIndex++] = arg;
         }
     }
 
     for (size_t i = 0; i < setterIndex; i++) {
-        auto setter = (*setters[i]);
 
         if (vcap <= i)
             throw std::invalid_argument("Error: not enough parameters.");
+
+        auto setter = (*setters[i]);
 
         auto value = parameters[i];
         setter(config, value);
