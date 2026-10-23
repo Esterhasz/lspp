@@ -10,6 +10,9 @@ namespace fs = std::filesystem;
 static void throw_invalid_argument(const std::string& arg) {
     throw std::invalid_argument("Error: unknown argument '" + arg + "'.");
 }
+static void throw_too_many_argumnets(size_t vcap) {
+   throw std::invalid_argument("Error: maximum amount of valued arguments is " + std::to_string(vcap) + ". ");
+}
 
 void fn::setup_config(std::string_view buffer, lspp_config& config) {
 
@@ -48,6 +51,9 @@ void fn::setup_config(std::string_view buffer, lspp_config& config) {
                 auto& setter = it->setter;
 
                 if (auto fn = std::get_if<ValuedSetter>(&it->setter)) {
+                    if (setterIndex >= vcap)
+                        throw_too_many_argumnets(vcap);
+
                     setters[setterIndex++] = fn;
                 }
                 else if (auto fn = std::get_if<UnvaluedSetter>(&it->setter)) {
@@ -76,8 +82,8 @@ void fn::setup_config(std::string_view buffer, lspp_config& config) {
                     auto& setter = it->setter;
 
                     if (auto fn = std::get_if<ValuedSetter>(&it->setter)) {
-                        if (setterIndex > vcap)
-                            throw std::invalid_argument("Error: maximum amount of valued arguments is " + std::to_string(vcap) + ". ");
+                        if (setterIndex >= vcap)
+                            throw_too_many_argumnets(vcap);
 
                         setters[setterIndex++] = fn;
                     }
@@ -98,21 +104,17 @@ void fn::setup_config(std::string_view buffer, lspp_config& config) {
             config.set(fs::path(arg));
         }
         else {
-            if (paramIndex > vcap)
-                throw std::invalid_argument("Error: maximum amount of valued arguments is " + std::to_string(vcap) + ". ");
+            if (paramIndex >= vcap)
+                throw_too_many_argumnets(vcap);
 
             parameters[paramIndex++] = arg;
         }
     }
 
     for (size_t i = 0; i < setterIndex; i++) {
+        if (i >= paramIndex)
+            throw std::invalid_argument("Error: not enough values.");
 
-        if (vcap <= i)
-            throw std::invalid_argument("Error: not enough parameters.");
-
-        auto setter = (*setters[i]);
-
-        auto value = parameters[i];
-        setter(config, value);
+        (*setters[i])(config, parameters[i]);
     }
 }
